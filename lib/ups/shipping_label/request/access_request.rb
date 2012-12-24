@@ -1,5 +1,4 @@
-#require 'ups/shipping_label/request/base'
-require 'nokogiri'
+require 'ups/shipping_label/request/base'
 
 module Ups
   module ShippingLabel

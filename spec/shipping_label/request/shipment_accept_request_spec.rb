@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Ups::ShippingLabel::Request::ShipmentAcceptRequest do
 
 	describe "#to_xml" do
-		let(:shipment_digest) { "123jkjlaksf" }
+		let (:shipment_digest) { "123jkjlaksf" }
 		let (:shipment_accept_request) { Ups::ShippingLabel::Request::ShipmentAcceptRequest.new(shipment_digest) }
 		let (:xml) { Nokogiri.XML(shipment_accept_request.to_xml) }
 

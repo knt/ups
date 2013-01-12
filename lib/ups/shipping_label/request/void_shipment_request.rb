@@ -5,14 +5,14 @@ module Ups
     module Request
       class VoidShipmentRequest < Base
 
-        attr_accessor :shipment_identification_number, :tracking_number, :customer_context
+        attr_accessor :shipment_identification_number, :tracking_numbers, :customer_context
 
         REQUEST_ACTION = "1"
 
         def initialize(shipment_identification_number, options={})
           @shipment_identification_number = shipment_identification_number
           
-          #@tracking_number = options[:tracking_number]
+          @tracking_numbers = options[:tracking_numbers]
           @customer_context = options[:customer_context]
         end
 
@@ -22,20 +22,21 @@ module Ups
               xml.Request {
                 xml.RequestAction REQUEST_ACTION
                 xml.TransactionReference {
-                  unless customer_context.nil?
-                    xml.CustomerContext customer_context
-                  end
+                  xml.CustomerContext customer_context
                 }
               }
 
-              xml.ShipmentIdentificationNumber shipment_identification_number
+              if !tracking_numbers.nil? && tracking_numbers.any?
+                xml.ExpandedVoidShipment {
+                  xml.ShipmentIdentificationNumber shipment_identification_number
 
-              #TODO: If ShipmentIdentificationNumber is not provided, ExpandedVoidShipment is expected
-              #TODO: /VoidShipmentRequest/ExpandedVoidShipment
-              #TODO: /VoidShipmentRequest/ExpandedVoidShipment/ShipmentIdentificationNumber
-              #TODO: /VoidShipmentRequest/ExpandedVoidShipment/TrackingNumber
-
-              #TODO: Is more than one tracking number allowed?
+                  tracking_numbers.each do |tracking_number|
+                    xml.TrackingNumber tracking_number
+                  end
+                }
+              else
+                xml.ShipmentIdentificationNumber shipment_identification_number
+              end
             }
           end
 

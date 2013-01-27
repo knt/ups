@@ -48,7 +48,9 @@ module Ups
 
           xml << @address.to_xml
 
-          xml << @location_id
+          unless @location_id.nil?
+            xml.LocationID @location_id
+          end
         }
       end
 

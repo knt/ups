@@ -37,10 +37,17 @@ module Ups
         DEFAULT_HTTP_USER_AGENT = "Mozilla/4.5"
 
         def initialize(shipper, ship_to, service_code, packages, options={})
-          #TODO: check to make sure its of type Shipper
+          raise ArgumentError, 'Argument is not instance of Shipper' unless shipper.is_a? Ups::Shipper
+          raise ArgumentError, 'Argument is not instnace of ShipTo' unless ship_to.is_a? Ups::ShipTo
+
           @shipper = shipper
           @ship_to = ship_to
-          @packages = packages  #TODO: Validate that each is of type package
+
+          packages.each do |package|
+            raise ArgumentError, 'All items in packages must be of type Package' unless package.is_a? Ups::Package
+          end
+
+          @packages = packages
 
           @request_option = options[:request_option] || DEFAULT_REQUEST_OPTION
           @customer_context = options[:customer_context]
@@ -57,7 +64,6 @@ module Ups
 
           @label_image_format_code = options[:label_image_format_code] || DEFAULT_LABEL_IMAGE_FORMAT_CODE
         end
-
 
         def to_xml
           request = Nokogiri::XML::Builder.new do |xml|
@@ -291,12 +297,8 @@ module Ups
                 #TODO /ShipmentConfirmRequest/ReceiptSpecification/ImageFormat/Code
                 #TODO /ShipmentConfirmRequest/ReceiptSpecification/ImageFormat/Description
                 #ZOMG IM DONE
-
-
               }
-
             }
-
           end
 
           request.to_xml

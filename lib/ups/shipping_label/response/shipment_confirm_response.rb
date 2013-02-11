@@ -15,14 +15,6 @@ module Ups
 					parse_response(response)
 				end
 
-				def succesful?
-					if @response_status_code == "1"
-						return true
-					else
-						return false
-					end
-				end
-
 				def parse_response(response)
 					parsed_xml = Nokogiri::XML(response)
 

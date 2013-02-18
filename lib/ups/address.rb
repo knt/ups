@@ -2,8 +2,6 @@ module Ups
   class Address
 
     attr_accessor :address_line1, :city, :country_code,
-
-    #Optional 
     :address_line2, :address_line3, :state_province, :postal_code, :is_residential
 
     def initialize(address_line1, city, country_code, options={})
@@ -23,30 +21,13 @@ module Ups
       request = Nokogiri::XML::Builder.new do |xml|
         xml.Address {
           xml.AddressLine1 @address_line1
-
-          unless @address_line2.nil?
-            xml.AddressLine2 @address_line2
-          end
-
-          unless @address_line3.nil?
-            xml.AddressLine3 @address_line3
-          end
-
+          xml.AddressLine2 @address_line2 unless @address_line2.nil?
+          xml.AddressLine3 @address_line3 unless @address_line3.nil?
           xml.City @city
-
-          unless @state_province.nil?
-            xml.StateProvinceCode @state_province
-          end
-
-          unless @postal_code.nil?
-            xml.PostalCode @postal_code
-          end
-
+          xml.StateProvinceCode @state_province unless @state_province.nil?
+          xml.PostalCode @postal_code unless @postal_code.nil?
           xml.CountryCode @country_code
-
-          unless @is_residential.nil?
-            xml.ResidentialAddress
-          end
+          xml.ResidentialAddress unless @is_residential.nil?
         }
       end
       

@@ -5,9 +5,13 @@ module Ups
     module Request
       class ShipmentConfirmRequest < Base
 
-        attr_accessor :shipper, :ship_to, :ship_from
+        attr_accessor :shipper, :ship_to, :service_code, :packages,
+        #Optional
+        :ship_from, :request_option, :customer_context, :shipment_description,
+        :service_description, :saturday_delivery, :label_print_method_code,
+        :label_http_user_agent, :label_image_format_code
 
-        REQUEST_ACTION = "ShipConfirm"
+        REQUEST_ACTION = :ShipConfirm
 
         REQUEST_OPTIONS = [:validate, :nonvalidate]
         DEFAULT_REQUEST_OPTION = :validate
@@ -30,11 +34,13 @@ module Ups
                   "85" => "UPS Today Express",
                   "86" => "UPS Today Express Saver"}
 
-        LABEL_PRINT_METHOD_CODES = ["GIF", "EPL", "ZPL", "STARPL", "SP"]
-        LABEL_IMAGE_FORMAT_CODES = ["GIF", "PNG"]
-        DEFAULT_LABEL_PRINT_METHOD_CODE = "GIF"
-        DEFAULT_LABEL_IMAGE_FORMAT_CODE = "GIF"
+        LABEL_PRINT_METHOD_CODES = [:GIF, :EPL, :ZPL, :STARPL, :SP]
+        LABEL_IMAGE_FORMAT_CODES = [:GIF, :PNG]
+        DEFAULT_LABEL_PRINT_METHOD_CODE = :GIF
+        DEFAULT_LABEL_IMAGE_FORMAT_CODE = :GIF
         DEFAULT_HTTP_USER_AGENT = "Mozilla/4.5"
+
+
 
         def initialize(shipper, ship_to, service_code, packages, options={})
           #raise ArgumentError, 'Argument is not instance of Shipper' unless shipper.is_a? Ups::Shipper
@@ -133,9 +139,7 @@ module Ups
                 #TODO /ShipmentConfirmRequest/Shipment/InvoiceLineTotal
 
                 xml.ShipmentServiceOptions {
-                  if @saturday_delivery
-                    xml.SaturdayDelivery
-                  end
+                  xml.SaturdayDelivery if @saturday_delivery
 
                   #TODO /ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/COD
                   #TODO /ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/Notification
@@ -153,31 +157,31 @@ module Ups
                 @packages.each do |package|
                   xml << package.to_xml
                 end
+              }
 
 
-                xml.LabelSpecification {
-                  xml.LabelPrintMethod {
-                    xml.Code @label_print_method_code
-                  }
-
-                  xml.HTTPUserAgent @label_http_user_agent
-
-                  #For EPL2, ZPL, STARPL or SPL labels
-                  # xml.LabelStockSize {
-                  #   xml.Height @label_stock_size_height
-                  #   xml.Width @label_stock_size_width
-                  # }
-
-                  #Valid formats are GIF or PNG
-                  xml.LabelImageFormat {
-                    xml.Code @label_image_format_code
-                  }
-
-                  #TODO /ShipmentConfirmRequest/LabelSpecification/Instruction
+              xml.LabelSpecification {
+                xml.LabelPrintMethod {
+                  xml.Code @label_print_method_code
                 }
 
-                #TODO /ShipmentConfirmRequest/ReceiptSpecification
+                xml.HTTPUserAgent @label_http_user_agent
+
+                #For EPL2, ZPL, STARPL or SPL labels
+                # xml.LabelStockSize {
+                #   xml.Height @label_stock_size_height
+                #   xml.Width @label_stock_size_width
+                # }
+
+                #Valid formats are GIF or PNG
+                xml.LabelImageFormat {
+                  xml.Code @label_image_format_code
+                }
+
+                #TODO /ShipmentConfirmRequest/LabelSpecification/Instruction
               }
+
+              #TODO /ShipmentConfirmRequest/ReceiptSpecification
             }
           end
 

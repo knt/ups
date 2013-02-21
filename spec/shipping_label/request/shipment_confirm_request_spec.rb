@@ -222,27 +222,3 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

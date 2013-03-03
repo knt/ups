@@ -1,5 +1,8 @@
-# UPS - a gem to generate UPS shipping labels
+# UPS - a Ruby gem to generate UPS shipping labels
 
+This gem is an (unofficial) wrapper around the XML-based api provided by [Ups](http://www.ups.com/). It allows you to build and send a shipment request, schedule a shipment for pickup, and generate a shipping label. 
+
+It is currently a work in progress. I hope to release the first version version.
 
 
 # TODO

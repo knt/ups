@@ -48,6 +48,17 @@ describe Ups::Shipper do
       expect(xml.at('/Shipper/EMailAddress').content).to eq extended_opts[:email_address]
     end
 
+    it "does not contain nodes for values not passed" do
+      shipper = Ups::Shipper.new(valid_opts)      
+      xml     = Nokogiri.XML(shipper.to_xml)
+      
+      expect(xml.at('/Shipper/AttentionName')).to be_nil
+      expect(xml.at('/Shipper/TaxIdentificationNumber')).to be_nil
+      expect(xml.at('/Shipper/PhoneNumber')).to be_nil
+      expect(xml.at('/Shipper/FaxNumber')).to be_nil
+      expect(xml.at('/Shipper/EMailAddress')).to be_nil
+    end
+
     it "contains an Address node when an Address object is passed" do
       pending "Clean up the Address class first" 
       return false

@@ -1,4 +1,6 @@
 module Ups
+  # TODO Think about the idea that all of these 'XML-Generating' classes might want to inherit from the same root...for validation methods and 
+  # so on.
   class Address
 
     attr_accessor :address_line1, :city, :country_code,
@@ -26,7 +28,7 @@ module Ups
           xml.City @city
           xml.StateProvinceCode @state_province unless @state_province.nil?
           xml.PostalCode @postal_code unless @postal_code.nil?
-          xml.CountryCode @country_code
+          xml.CountryCode @country_code 
           xml.ResidentialAddress unless @is_residential.nil?
         }
       end

@@ -3,7 +3,6 @@ module Ups
 
     def initialize(options = {})
       super
-
       @required_attributes << :shipper_number
       validate_required(options)
     end

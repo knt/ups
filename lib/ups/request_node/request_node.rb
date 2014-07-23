@@ -13,7 +13,7 @@ module Ups
     private
 
       def validate_required(options)
-        @required_attributes.each do |att|
+        @required_attributes.flatten.each do |att|
           raise "Required attribute '#{att}' not set." unless options[att]
         end
       end

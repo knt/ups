@@ -1,5 +1,5 @@
 module Ups
-  class Package
+  class Package < RequestNode
 
     PACKAGING_TYPES = {
       "01" => "UPS Letter",
@@ -15,49 +15,49 @@ module Ups
       "2c" => "Large Express Box"
     }
 
-    DIMENSION_UNITS_OF_MEASUREMENT = {
+    DIMENSION_UNITS = {
       "IN" => "Inches",
       "CM" => "Centimeters",
       "00" => "Metric Units Of Measurement",
       "01" => "English Units of Measurement"
     }
 
-    WEIGHT_UNITS_OF_MEASUREMENT = {
+    WEIGHT_UNITS = {
       "LBS" => "Pounds",
       "KGS" => "Kilograms",
       "00" => "Metric Unit of Measurements",
       "01" => "English Unit of Measurements"
     }
-
-    def initialize(length, width, height, weight, options={})
+    attr_accessor :length, :width, :height, :weight, :description, :packaging_type_code, :large_package, :additional_handling,
+                  :dimension_unit_code, :weight_unit_code
+    
+    def initialize(options = {})
+      @required_attributes << [:length, :width, :height, :weight]
+      @optional_attributes << [
+                               :description, 
+                               :packaging_type_code, 
+                               :large_package, 
+                               :additional_handling, 
+                               :dimension_unit_code,
+                               :weight_unit_code
+                              ]
       #TODO: Move to Dimensions class
-      @length = length
-      @width = width
-      @height = height
-      @weight = weight
 
-      @description = options[:description]
-      @packaging_type_code = options[:packaging_type_code]
       @packaging_type_description = PACKAGING_TYPES[@packaging_type_code] unless @packaging_type_code.nil?
 
       #TODO: Move to Unit of Measurement class
-      @dimension_unit_of_measurement_code = options[:dimension_unit_of_measurement_code]
-      @dimension_unit_of_measurement_decription = DIMENSION_UNITS_OF_MEASUREMENT[@dimension_unit_of_measurement_code] unless @dimension_unit_of_measurement_code.nil?
-      @weight_unit_of_measurement_code = options[:weight_unit_of_measurement_code]
-      @weight_unit_of_measurement_description = WEIGHT_UNITS_OF_MEASUREMENT[@weight_unit_of_measurement_code] unless @weight_unit_of_measurement_code.nil?
-
-      @large_package = options[:large_package] == true
-      @additional_handling = options[:additional_handling] == true
+      @dimension_unit_decription = DIMENSION_UNITS[@dimension_unit_code] unless @dimension_unit_code.nil?
+      @weight_unit_description   = WEIGHT_UNITS[@weight_unit_code] unless @weight_unit_code.nil?
     end
 
 
     def to_xml
       request = Nokogiri::XML::Builder.new do |xml|
+        
         xml.Package {
+          xml.Description @description unless @description.nil?
+          xml.PackagingType @packaging_type unless @packaging_type.nil?
 
-          unless @description.nil?
-            xml.Description @description
-          end
 
           unless @packaging_type_code.nil?
             xml.PackagingType {
@@ -67,10 +67,10 @@ module Ups
           end
 
           xml.Dimensions {
-            unless @dimension_unit_of_measurement_code.nil?
+            unless @dimension_unit_code.nil?
               xml.UnitOfMeasurement {
-                xml.Code @dimension_unit_of_measurement_code
-                xml.Description @dimension_unit_of_measurement_decription
+                xml.Code @dimension_unit_code
+                xml.Description @dimension_unit_decription
               }
             end
 
@@ -80,10 +80,10 @@ module Ups
           }
 
           xml.PackageWeight {
-            unless @weight_unit_of_measurement_code.nil?
+            unless @weight_unit_code.nil?
               xml.UnitOfMeasurement {
-                xml.Code @weight_unit_of_measurement_code
-                xml.Description @weight_unit_of_measurement_description
+                xml.Code @weight_unit_code
+                xml.Description @weight_unit_description
               }
             end
 
@@ -103,7 +103,7 @@ module Ups
             xml.AdditionalHandling
           end
 
-          xml.PackageServiceOptions {
+          #xml.PackageServiceOptions {
             #TODO /Package/PackageServiceOptions/DeliveryConfirmation/..
             #TODO /Package/PackageServiceOptions/InsuredValue/..
             #TODO /Package/PackageServiceOptions/COD/..
@@ -112,7 +112,7 @@ module Ups
             #TODO /Package/PackageServiceOptions/Notification/..
             #TODO /Package/PackageServiceOptions/ReturnsFlexibleAccessIndicator
             #TODO /Package/PackageServiceOptions/DryIce/..
-          }
+          #}
         }
       end
 

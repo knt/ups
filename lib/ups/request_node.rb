@@ -14,7 +14,7 @@ module Ups
 
       def validate_required(options)
         @required_attributes.each do |att|
-          raise "Required attribute '#{att}' not set." unless options[att] && !options[att].empty?
+          raise "Required attribute '#{att}' not set." unless options[att]
         end
       end
   

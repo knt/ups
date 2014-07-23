@@ -11,10 +11,10 @@ module Ups
       super(options)
     end
 
-    def to_xml
+    def to_xml(root_node = 'Address')
       request = Nokogiri::XML::Builder.new do |xml|
         
-        xml.Address {
+        xml.send(root_node) {
           xml.AddressLine1 @address_line1
           xml.AddressLine2 @address_line2 unless @address_line2.nil?
           xml.AddressLine3 @address_line3 unless @address_line3.nil?

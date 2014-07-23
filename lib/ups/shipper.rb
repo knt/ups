@@ -19,7 +19,7 @@ module Ups
           xml.PhoneNumber @phone_number              unless @phone_number.nil?
           xml.FaxNumber @fax_number                  unless @fax_number.nil?
           xml.EMailAddress @email_address            unless @email_address.nil?
-          xml << @ship_from.to_xml                   unless @ship_from.nil?
+          xml << @ship_from.to_xml('ShipFrom')       unless @ship_from.nil?
           xml << @address.to_xml                     unless @address.nil?
         }
       

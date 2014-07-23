@@ -60,13 +60,19 @@ describe Ups::Shipper do
     end
 
     it "contains an Address node when an Address object is passed" do
-      pending "Clean up the Address class first" 
-      return false
+      address = Ups::Address.new({address_line1: '1 Bag End', city: 'Hobbiton', country_code: 'TS'})
+      shipper = Ups::Shipper.new(valid_opts.merge(address: address))
+      xml     = Nokogiri.XML(shipper.to_xml)
+
+      expect(xml.at('/Shipper/Address').to_s).to eq address.to_xml()
     end
 
     it "contains a ShipFrom node when an Address object is passed as a ShipFrom address" do
-      pending "Clean up the Address class first" 
-      return false
+      address = Ups::Address.new({address_line1: '1 Bag End', city: 'Hobbiton', country_code: 'TS'})
+      shipper = Ups::Shipper.new(valid_opts.merge(ship_from: address))
+      xml     = Nokogiri.XML(shipper.to_xml)
+
+      expect(xml.at('/Shipper/ShipFrom').to_s).to eq address.to_xml('ShipFrom')
     end
 
     

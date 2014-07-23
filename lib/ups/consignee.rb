@@ -4,6 +4,7 @@ module Ups
     def initialize(options = {})
       super
       @required_attributes << :address
+      @optional_attributes << [:location_id]
       validate_required(options)
     end
 

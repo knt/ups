@@ -62,7 +62,6 @@ describe Ups::Client do
                 phone_number:   '5552129201', 
                 fax_number:     '5552129202',
                 email_address:  'bart@example.com',
-                ringer: 'Ding Dong!'
       } 
       client = Ups::Client.new(params)    
       expect{ client.send(:validate_required, params) }.to raise_error RuntimeError,  "Required attribute 'name' not set."

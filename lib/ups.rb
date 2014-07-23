@@ -4,6 +4,7 @@ require "ups/shipping_label/request/access_request"
 require "ups/shipping_label/request/shipment_accept_request"
 require "ups/shipping_label/request/void_shipment_request"
 require "ups/shipping_label/request/shipment_confirm_request"
+require 'ups/request_node'
 require 'ups/client'
 require "ups/shipper"
 require "ups/consignee"

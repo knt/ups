@@ -12,9 +12,9 @@ describe Ups::Consignee do
 
   describe '#to_xml' do
     let(:address){ Address.new({}) }
-    let(:valid_opts){ return {name: 'Johann Smithwick', address: '123456'} }
+    let(:valid_opts){ return {} }
     
-    it "contains a /ShippTo root node" do
+    it "contains a /ShipTo root node" do
     end
 
     it "contains required nodes and values" do
@@ -30,10 +30,7 @@ describe Ups::Consignee do
       pending "Clean up the Address class first" 
       return false
     end
-
-    it "contains a ShipFrom node when an Address object is passed as a ShipFrom address" do
-      pending "Clean up the Address class first" 
-      return false
-    end
+  
+  end
 
 end

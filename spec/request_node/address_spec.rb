@@ -30,6 +30,7 @@ describe Ups::Address do
     it "raises an error if a required parameter is not present" do
       params  = {city: 'Any Town', country_code: 'US'} 
       address = Ups::Address.new(params)    
+      
       expect{ address.send(:validate_required, params) }.to raise_error RuntimeError,  "Required attribute 'address_line1' not set."
     end
     

@@ -2,7 +2,7 @@ module Ups
   class Consignee < Client
     
     def initialize(options = {})
-      super
+      super(options)
       @required_attributes << :address
       @optional_attributes << :location_id
       validate_required(options)

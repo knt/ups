@@ -1,6 +1,5 @@
 module Ups
-  # TODO Think about the idea that all of these 'XML-Generating' classes might want to inherit from the same root...for validation methods and 
-  # so on.
+  
   class Address < RequestNode
 
     attr_accessor :address_line1, :city, :country_code, :address_line2, :address_line3, :state, :postal_code, :is_residential

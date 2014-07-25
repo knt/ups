@@ -26,8 +26,10 @@ module Ups
           }
 
           xml.Weight @weight
-          }
+        }
       end
+      
+      Nokogiri::XML(request.to_xml).root.to_xml
     end
 
 

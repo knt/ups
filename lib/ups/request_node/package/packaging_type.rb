@@ -43,6 +43,8 @@ module Ups
         }
       
       end
+      
+      Nokogiri::XML(request.to_xml).root.to_xml
     end
 
 

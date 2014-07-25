@@ -1,12 +1,12 @@
 module Ups
   class Package < RequestNode
-    attr_accessor :package_dimensions, :package_weight, :packaging_type, :description, :large_package, :additional_handling
+    attr_accessor :package_dimensions, :package_weight, :packaging_type, :description, :large_package, :additional_handling, :reference_number, :package_service_options
                   
     
     def initialize(options = {})
       super(options)
-      @required_attributes << [:package_dimensions, :package_weight, :packaging_type]
-      @optional_attributes << [:description, :large_package, :additional_handling]
+      @required_attributes  = [:package_dimensions, :package_weight, :packaging_type]
+      @optional_attributes  = [:description, :large_package, :additional_handling]
     end
 
 
@@ -29,5 +29,6 @@ module Ups
 
       Nokogiri::XML(request.to_xml).root.to_xml
     end
+  
   end
 end

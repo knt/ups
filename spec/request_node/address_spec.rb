@@ -37,7 +37,6 @@ describe Ups::Address do
   end
 
   describe '#to_xml' do
-    let(:address){ Address.new({}) }
     let(:valid_opts){ return {address_line1: '123 Any Street', city: 'Any Town', country_code: 'US'} }
     
     it "contains a /Address root node" do

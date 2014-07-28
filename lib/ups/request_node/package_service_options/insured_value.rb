@@ -20,7 +20,7 @@ module Ups
           
           if @type_code
             xml.Type{
-              xml.Code @type_code 
+              xml.Code @type_code  # 01 EVS or 02 DVS Defaults to 01
               xml.Description @type_description if @type_description
             }
           end

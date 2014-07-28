@@ -28,8 +28,9 @@ module Ups
     attr_accessor :type_code, :barcode, :value
 
     def initialize(options = {})
-      super(options)
       @required_attributes = [:type_code, :value]
+      @optional_attributes = [:barcode]
+      super(options)
     end
 
     def to_xml
@@ -37,12 +38,14 @@ module Ups
       request = Nokogiri::XML::Builder.new do |xml|
 
         xml.ReferenceNumber{
-          xml.Code @code
+          xml.Code @type_code
           xml.Value @value
           xml.BarCodeIndicator if @barcode
         }
       
       end
+      
+      Nokogiri::XML(request.to_xml).root.to_xml
     end
 
 

@@ -43,8 +43,6 @@ module Ups
 
 
         def initialize(shipper, ship_to, service_code, packages, options={})
-          #raise ArgumentError, 'Argument is not instance of Shipper' unless shipper.is_a? Ups::Shipper
-          #raise ArgumentError, 'Argument is not instnace of ShipTo' unless ship_to.is_a? Ups::ShipTo
 
           @shipper = shipper
           @ship_to = ship_to

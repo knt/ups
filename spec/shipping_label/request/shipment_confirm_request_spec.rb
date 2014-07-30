@@ -13,22 +13,22 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
     let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
 
     before(:each) do
-      shipper.stub(:to_xml).and_return("<Shipper></Shipper>")
-      shipper.stub(:shipper_number).and_return(shipper_number)
-      ship_to.stub(:to_xml).and_return("<ShipTo></ShipTo>")
-      package.stub(:to_xml).and_return("<Package></Package>")
+      allow(shipper).to receive(:to_xml).and_return("<Shipper></Shipper>")
+      allow(shipper).to receive(:shipper_number).and_return(shipper_number)
+      allow(ship_to).to receive(:to_xml).and_return("<ShipTo></ShipTo>")
+      allow(package).to receive(:to_xml).and_return("<Package></Package>")
     end
 
     it "builds xml with root node as ShipmentConfirmRequest" do
-      xml.at('/ShipmentConfirmRequest').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest')).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Request" do
-      xml.at('/ShipmentConfirmRequest/Request').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Request')).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Request/RequestAction set to ShipConfirm" do
-      xml.at('/ShipmentConfirmRequest/Request/RequestAction').content.should == "ShipConfirm"
+      expect(xml.at('/ShipmentConfirmRequest/Request/RequestAction').content).to eq("ShipConfirm")
     end
 
     context "if options[:request_option] present" do
@@ -38,13 +38,13 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
 
       it "builds xml with /ShipmentConfirmRequest/Request/RequestOption set to request_option" do
-        xml.at('/ShipmentConfirmRequest/Request/RequestOption').content.should == request_option
+        expect(xml.at('/ShipmentConfirmRequest/Request/RequestOption').content).to eq(request_option)
       end
     end
 
     context "if options[:request_option] is nil" do
       it "builds xml with /ShipmentConfirmRequest/Request/RequestOption set to validate" do
-        xml.at('/ShipmentConfirmRequest/Request/RequestOption').content.should == "validate"
+        expect(xml.at('/ShipmentConfirmRequest/Request/RequestOption').content).to eq("validate")
       end
     end
 
@@ -55,21 +55,21 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
 
       it "builds xml with /ShipmentConfirmRequest/Request/TransactionReference" do
-        xml.at('/ShipmentConfirmRequest/Request/TransactionReference').should_not be_nil
+        expect(xml.at('/ShipmentConfirmRequest/Request/TransactionReference')).not_to be_nil
       end
       it "builds xml with /ShipmentConfirmRequest/Request/TransactionReference/CustomerContext set to customer_context" do
-        xml.at('/ShipmentConfirmRequest/Request/TransactionReference/CustomerContext').content.should == customer_context
+        expect(xml.at('/ShipmentConfirmRequest/Request/TransactionReference/CustomerContext').content).to eq(customer_context)
       end
     end
 
     context "if options[:customer_context] is not present" do
       it "does not include /ShipmentConfirmRequest/Request/TransactionReference node" do
-        xml.at('/ShipmentConfirmRequest/Request/TransactionReference').should be_nil
+        expect(xml.at('/ShipmentConfirmRequest/Request/TransactionReference')).to be_nil
       end
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment" do
-      xml.at('/ShipmentConfirmRequest/Shipment').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment')).not_to be_nil
     end
 
     context "if options[:shipment_description] is present" do
@@ -78,22 +78,22 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:shipment_confirm_request) { Ups::ShippingLabel::Request::ShipmentConfirmRequest.new(shipper, ship_to, service_code, packages, options) }
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
       it "builds xml with /ShipmentConfirmRequest/Shipment/Description set to shipment_description" do
-        xml.at('/ShipmentConfirmRequest/Shipment/Description').content.should == shipment_description
+        expect(xml.at('/ShipmentConfirmRequest/Shipment/Description').content).to eq(shipment_description)
       end
     end
 
     context "if options[:shipment_description] is nil" do
       it "does not include /ShipmentConfirmRequest/Shipment/Description node" do
-        xml.at('/ShipmentConfirmRequest/Shipment/Description').should be_nil
+        expect(xml.at('/ShipmentConfirmRequest/Shipment/Description')).to be_nil
       end
     end
 
     it "includes shipper xml" do
-      xml.at('/ShipmentConfirmRequest/Shipment/Shipper').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/Shipper')).not_to be_nil
     end
 
     it "includes ship_to xml" do
-      xml.at('/ShipmentConfirmRequest/Shipment/ShipTo').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/ShipTo')).not_to be_nil
     end
 
     context "if options[:ship_from] is present" do
@@ -105,35 +105,35 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/PaymentInformation" do
-      xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation')).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid" do
-      xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid')).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper" do
-      xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper').should_not be_nil
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper')).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper/AccountNumber set to shipper.shipper_number" do
-      xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper/AccountNumber').content.should == shipper_number
+      expect(xml.at('/ShipmentConfirmRequest/Shipment/PaymentInformation/Prepaid/BillShipper/AccountNumber').content).to eq(shipper_number)
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/Service" do
-      xml.at("/ShipmentConfirmRequest/Shipment/Service").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/Shipment/Service")).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/Service/Code set to service_code" do
-      xml.at("/ShipmentConfirmRequest/Shipment/Service/Code").content.should == service_code
+      expect(xml.at("/ShipmentConfirmRequest/Shipment/Service/Code").content).to eq(service_code)
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/Service/Description set to SERVICE_CODES[service_code]" do
-      xml.at("/ShipmentConfirmRequest/Shipment/Service/Description").content.should == Ups::ShippingLabel::Request::ShipmentConfirmRequest::SERVICE_CODES[service_code]
+      expect(xml.at("/ShipmentConfirmRequest/Shipment/Service/Description").content).to eq(Ups::ShippingLabel::Request::ShipmentConfirmRequest::SERVICE_CODES[service_code])
     end
 
     it "builds xml with /ShipmentConfirmRequest/Shipment/ShipmentServiceOptions" do
-      xml.at("/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions")).not_to be_nil
     end
 
     context "if options[:saturday_delivery] is true" do
@@ -141,18 +141,18 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:shipment_confirm_request) { Ups::ShippingLabel::Request::ShipmentConfirmRequest.new(shipper, ship_to, service_code, packages, options) }
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
       it "builds xml with /ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery" do
-        xml.at('/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery').should_not be_nil
+        expect(xml.at('/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery')).not_to be_nil
       end
     end
 
     context "if options[:saturday_delivery] is not present" do
       it "does not include node for /ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery" do
-        xml.at("/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery").should be_nil
+        expect(xml.at("/ShipmentConfirmRequest/Shipment/ShipmentServiceOptions/SaturdayDelivery")).to be_nil
       end
     end
 
     it "includes xml for each Package in packages" do
-      xml.at("/ShipmentConfirmRequest/Shipment/Package").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/Shipment/Package")).not_to be_nil
     end
 
     context "if there are multiple packages in packages" do
@@ -160,11 +160,11 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
     end
 
     it "builds xml with /ShipmentConfirmRequest/LabelSpecification" do
-      xml.at("/ShipmentConfirmRequest/LabelSpecification").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/LabelSpecification")).not_to be_nil
     end
 
     it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod" do
-      xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod")).not_to be_nil
     end
 
     context "if options[:label_print_method_code] is present" do
@@ -173,13 +173,13 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:shipment_confirm_request) { Ups::ShippingLabel::Request::ShipmentConfirmRequest.new(shipper, ship_to, service_code, packages, options) }
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod/Code set to label_print_method_code" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod/Code").content.should == label_print_method_code.to_s
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod/Code").content).to eq(label_print_method_code.to_s)
       end
     end
 
     context "if options[:label_print_method_code] is not present" do
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod set to DEFAULT_LABEL_PRINT_METHOD_CODE" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod/Code").content.should == Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_LABEL_PRINT_METHOD_CODE.to_s
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelPrintMethod/Code").content).to eq(Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_LABEL_PRINT_METHOD_CODE.to_s)
       end
     end
 
@@ -189,33 +189,33 @@ describe Ups::ShippingLabel::Request::ShipmentConfirmRequest do
       let (:shipment_confirm_request) { Ups::ShippingLabel::Request::ShipmentConfirmRequest.new(shipper, ship_to, service_code, packages, options) }
       let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent set to options[:label_http_user_agent]" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent").content.should == label_http_user_agent
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent").content).to eq(label_http_user_agent)
       end
     end
 
     context "if options[:label_http_user_agent] is not present" do
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent set to DEFAULT_HTTP_USER_AGENT" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent").content.should == Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_HTTP_USER_AGENT
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/HTTPUserAgent").content).to eq(Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_HTTP_USER_AGENT)
       end
     end
 
     it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelImageFormat" do
-      xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat").should_not be_nil
+      expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat")).not_to be_nil
     end
 
     context "if options[:label_image_format_code] is present" do
       let(:label_image_format_code) { :GIF }
       let(:options) { {:label_image_format_code => label_image_format_code}}
       let (:shipment_confirm_request) { Ups::ShippingLabel::Request::ShipmentConfirmRequest.new(shipper, ship_to, service_code, packages, options) }
-      let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }     
+      let (:xml) { Nokogiri.XML(shipment_confirm_request.to_xml) }
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code set to options[:label_image_format_code]" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code").content.should == label_image_format_code.to_s
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code").content).to eq(label_image_format_code.to_s)
       end
     end
 
     context "if options[:label_image_format_code] is not present" do
       it "builds xml with /ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code set to DEFAULT_LABEL_IMAGE_FORMAT_CODE" do
-        xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code").content.should == Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_LABEL_IMAGE_FORMAT_CODE.to_s
+        expect(xml.at("/ShipmentConfirmRequest/LabelSpecification/LabelImageFormat/Code").content).to eq(Ups::ShippingLabel::Request::ShipmentConfirmRequest::DEFAULT_LABEL_IMAGE_FORMAT_CODE.to_s)
       end
     end
 

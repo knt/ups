@@ -8,24 +8,24 @@ describe Ups::ShippingLabel::Request::ShipmentAcceptRequest do
 		let (:xml) { Nokogiri.XML(shipment_accept_request.to_xml) }
 
 		it "builds xml with root node as ShipmentAcceptRequest" do
-			xml.at('/ShipmentAcceptRequest').should_not be_nil
+			expect(xml.at('/ShipmentAcceptRequest')).not_to be_nil
 		end
 
 		it "builds xml with /ShipmentAcceptRequest/Request node" do
-			xml.at('/ShipmentAcceptRequest/Request').should_not be_nil
+			expect(xml.at('/ShipmentAcceptRequest/Request')).not_to be_nil
 		end
 
 		it "builds xml with /ShipmentAcceptRequest/Request/RequestAction set to ShipAccept" do
-			xml.at('/ShipmentAcceptRequest/Request/RequestAction').content.should == "ShipAccept"
+			expect(xml.at('/ShipmentAcceptRequest/Request/RequestAction').content).to eq("ShipAccept")
 		end
 
 		it "builds xml with /ShipmentAcceptRequest/ShipmentDigest set to shipment digest" do
-			xml.at('/ShipmentAcceptRequest/ShipmentDigest').content.should == shipment_digest
+			expect(xml.at('/ShipmentAcceptRequest/ShipmentDigest').content).to eq(shipment_digest)
 		end
 
 		context "if options[:customer_context] is nil" do
 			it "does not include /ShipmentAcceptRequest/Request/TransactionReference" do
-				xml.at('/ShipmentAcceptRequest/Request/TransactionReference').should be_nil
+				expect(xml.at('/ShipmentAcceptRequest/Request/TransactionReference')).to be_nil
 			end
 		end
 
@@ -35,11 +35,11 @@ describe Ups::ShippingLabel::Request::ShipmentAcceptRequest do
 			let (:xml) { Nokogiri.XML(shipment_accept_request.to_xml) }
 
 			it "builds xml with /ShipmentAcceptRequest/Request/TransactionReference" do
-				xml.at('/ShipmentAcceptRequest/Request/TransactionReference').should_not be_nil
+				expect(xml.at('/ShipmentAcceptRequest/Request/TransactionReference')).not_to be_nil
 			end
 
 			it "builds xml with /ShipmentAcceptRequest/Request/TransactionReference/CustomerContext set to customer_context" do
-				xml.at('/ShipmentAcceptRequest/Request/TransactionReference/CustomerContext').content.should == customer_context
+				expect(xml.at('/ShipmentAcceptRequest/Request/TransactionReference/CustomerContext').content).to eq(customer_context)
 			end
 		end
 	end
